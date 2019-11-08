@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Start",
+            "request": "launch",
+            "mainClass": "pkg.Start",
+            "projectName": "6502_bd3c72d1"
+        }
+    ]
+}
