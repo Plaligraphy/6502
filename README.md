@@ -1,2 +1,4 @@
 # 6502
-6502 Emulators, in both Java and Golang
+6502 Emulator in Java
+<br />
+[![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)](https://travis-ci.org/dwyl/esta)
