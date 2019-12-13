@@ -6,10 +6,12 @@ import java.util.Scanner;
 
 public class Code {
     File asm = new File("code.asm");
-
+    Scanner in = new Scanner(System.in);
     private int sp, x, y, a;
-    private String[] cmds = {"lda", "ldx", "ldy", "sta", "stx", "sty", "inc","inx", "iny",
+    private int dataLoad;
+    private String[] cmds = {"slc", "slx", "sly", "inc","inx", "iny",
     "dec", "dex", "dey"};
+    private int mem0=0,mem1=0,mem2=0,mem3=0,mem4=0,mem5=0,mem6=0,mem7=0;
 
     public void init() throws IOException, InterruptedException {
         System.out.println("6502");
@@ -29,7 +31,6 @@ public class Code {
     private void exec() throws InterruptedException {
         Thread.sleep(2000);
         cls();
-        Scanner in = new Scanner(System.in);
         System.out.println("-- Execution started --");
         System.out.println("Stack pointer set to " + sp);
 
@@ -40,10 +41,22 @@ public class Code {
             System.out.println("invalid!");
             exec();
         }
-        if(givenCommand.contains("ld")) {
-            System.out.println("load");
-        }else if(givenCommand.contains("st")) {
-            System.out.println("store");
+        if(givenCommand.contains("sl")) {
+            if(givenCommand.contains("x")) {
+                store("x");
+            }else if(givenCommand.contains("y")) {
+                store("y");
+            }else if(givenCommand.contains("c")) {
+                store("c");
+            }
+        }else if(givenCommand.contains("ld")) {
+            if(givenCommand.contains("x")) {
+              //  load("x");
+            }else if(givenCommand.contains("y")) {
+              //  load("y");
+            }else if(givenCommand.contains("c")) {
+              //  load("c");
+            }
         }else if(givenCommand.contains("in")) {
             if(givenCommand.contains("x")) {
                 System.out.println("inx issued");
@@ -74,7 +87,211 @@ public class Code {
             }
         }
 
-      }private void cls() {
+      }private void store(String regStore) throws InterruptedException {
+        System.out.println("enter store location: ");
+        int storeLocale = in.nextInt();
+        switch(storeLocale) {
+            case 0:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem0+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem0+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem0+=a;
+                    reload();
+                }
+                break;
+            case 1:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem1+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem1+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem1+=a;
+                    reload();
+                }
+                break;
+            case 2:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem2+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem2+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem2+=a;
+                    reload();
+                }
+                break;
+            case 3:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem3+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem3+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem3+=a;
+                    reload();
+                }
+                break;
+            case 4:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem4+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem4+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem4+=a;
+                    reload();
+                }
+                break;
+            case 5:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem5+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem5+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem5+=a;
+                    reload();
+                }
+                break;
+            case 6:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem6+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem6+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem6+=a;
+                    reload();
+                }
+                break;
+            case 7:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem7 += x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem7+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem7+=a;
+                    reload();
+                }
+                break;
+        }
+      }/*private void load(String reg) throws InterruptedException {//-----------------------------------------------
+        System.out.println("enter data to load (enter in decimal): ");
+        dataLoad = in.nextInt();
+        switch(reg) {
+            case 0:
+                if(reg.equalsIgnoreCase("x")) {
+                    mem0+=dataLoad;
+                    reload();
+                }else if(reg.equalsIgnoreCase("y")) {
+                    mem0+=dataLoad;
+                    reload();
+                }else if(reg.equalsIgnoreCase("c")) {
+                    mem0+=a;
+                    reload();
+                }
+                break;
+            case 1:
+                if(reg.equalsIgnoreCase("x")) {
+                    mem1+=x;
+                    reload();
+                }else if(reg.equalsIgnoreCase("y")) {
+                    mem1+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem1+=a;
+                    reload();
+                }
+                break;
+            case 2:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem2+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem2+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem2+=a;
+                    reload();
+                }
+                break;
+            case 3:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem3+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem3+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem3+=a;
+                    reload();
+                }
+                break;
+            case 4:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem4+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem4+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem4+=a;
+                    reload();
+                }
+                break;
+            case 5:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem5+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem5+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem5+=a;
+                    reload();
+                }
+                break;
+            case 6:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem6+=x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem6+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem6+=a;
+                    reload();
+                }
+                break;
+            case 7:
+                if(regStore.equalsIgnoreCase("x")) {
+                    mem7 += x;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("y")) {
+                    mem7+=y;
+                    reload();
+                }else if(regStore.equalsIgnoreCase("c")) {
+                    mem7+=a;
+                    reload();
+                }
+                break;
+        }
+        }
+*/
+      private void cls() {
         for (int i = 0; i < 50; ++i) System.out.println();
       }private void reload() throws InterruptedException {
         sp++;
@@ -82,7 +299,15 @@ public class Code {
         System.out.println("y: " + y);
         System.out.println("x: " + x);
         System.out.println("sp: " + sp);
-        Thread.sleep(3000);
+        System.out.println("m0: " + mem0);
+        System.out.println("m1: " + mem1);
+        System.out.println("m2: " + mem2);
+        System.out.println("m3: " + mem3);
+        System.out.println("m4: " + mem4);
+        System.out.println("m5: " + mem5);
+        System.out.println("m6: " + mem6);
+        System.out.println("m7: " + mem7);
+        Thread.sleep(1500);
         exec();
     }
 }
