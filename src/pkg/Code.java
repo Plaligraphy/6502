@@ -9,9 +9,9 @@ public class Code {
     Scanner in = new Scanner(System.in);
     public int sp, x, y, a;
     private int dataLoad;
-    private String[] cmds = {"slc", "slx", "sly", "inc","inx", "iny",
-    "dec", "dex", "dey", "ldx", "ldy", "ldc", "zlx", "exit"};
 
+    private String[] cmds = {"slc", "slx", "sly", "inc","inx", "iny",
+    "dec", "dex", "dey", "ldx", "ldy", "ldc", "zlx", "exit", "lnh", "chk"};
 
     public int mem0=0,mem1=0,mem2=0,mem3=0,mem4=0,mem5=0,mem6=0,mem7=0;
 
@@ -19,7 +19,7 @@ public class Code {
         System.out.println("6502");
         if (!asm.exists()) asm.createNewFile();
         System.out.println("Code belongs in code.asm");
-        sp = 0100;
+        sp = 64;
         System.out.println("-- Execution started --");
         exec();
     }
@@ -31,24 +31,25 @@ public class Code {
             System.out.print(c);
         fr.close();
         }
-    private void exec() throws InterruptedException, IOException {
+    public void exec() throws InterruptedException, IOException {
         Thread.sleep(500);
         cls();
         System.out.println("type 'exit' to exit");
         System.out.println("Stack pointer set to " + sp);
-
         System.out.println("enter test command: ");
+
         String givenCommand = in.nextLine(); givenCommand.toLowerCase();
-        boolean rst = Arrays.stream(cmds).anyMatch(givenCommand :: equals);
-        if(!rst) {
-            System.out.println("invalid!");
-            exec();
-        }
-        if (givenCommand.equalsIgnoreCase("zlx")) {
+
+       if(givenCommand.equalsIgnoreCase("chk")) {
+           reload();
+       }else if(givenCommand.equalsIgnoreCase("lnh")) {
+            launch_GUI();
+        }else if (givenCommand.equalsIgnoreCase("zlx")) {
             x=0;
             a=0;
             y=0;
             reload();
+            //sets registers to 0
         }else if(givenCommand.contains("sl")) {
             if(givenCommand.contains("x")) {
                 store("x");
@@ -93,7 +94,13 @@ public class Code {
             System.exit(0);
         }
 
-      }private void store(String regStore) throws InterruptedException, IOException {
+      }
+
+    private void launch_GUI() throws IOException, InterruptedException {
+        GUI g = new GUI(); g.init();
+    }
+
+    private void store(String regStore) throws InterruptedException, IOException {
         System.out.println("enter store location: ");
         int storeLocale = in.nextInt();
         switch(storeLocale) {
@@ -194,7 +201,8 @@ public class Code {
                 }
                 break;
         }
-      }private void load(String reg) throws InterruptedException, IOException {//-----------------------------------------------
+      }
+      private void load(String reg) throws InterruptedException, IOException {//-----------------------------------------------
         System.out.println("memory location to transfer to register: ");
         dataLoad = in.nextInt();
         switch(dataLoad) {
