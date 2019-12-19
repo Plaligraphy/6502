@@ -1,14 +1,13 @@
 package pkg;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Code {
     File asm = new File("code.asm");
     Scanner in = new Scanner(System.in);
     public int sp, x, y, a;
-    private int dataLoad;
+    public String givenCommand;
 
     private String[] cmds = {"slc", "slx", "sly", "inc","inx", "iny",
     "dec", "dex", "dey", "ldx", "ldy", "ldc", "zlx", "exit", "lnh", "chk"};
@@ -21,24 +20,19 @@ public class Code {
         System.out.println("Code belongs in code.asm");
         sp = 64;
         System.out.println("-- Execution started --");
-        exec();
+        exec("");
     }
-    private void read() throws IOException {
-        FileReader fr = new FileReader(asm);
-        char [] a = new char[50];
-        fr.read(a);
-        for(char c : a)
-            System.out.print(c);
-        fr.close();
-        }
-    public void exec() throws InterruptedException, IOException {
+    public void exec(String ext_launch) throws InterruptedException, IOException {
         Thread.sleep(500);
         cls();
         System.out.println("type 'exit' to exit");
         System.out.println("Stack pointer set to " + sp);
         System.out.println("enter test command: ");
-
-        String givenCommand = in.nextLine(); givenCommand.toLowerCase();
+        if(ext_launch.equalsIgnoreCase("")) {
+            givenCommand = in.nextLine(); givenCommand.toLowerCase();
+        }else{
+            givenCommand = ext_launch;
+        }
 
        if(givenCommand.equalsIgnoreCase("chk")) {
            reload();
@@ -204,7 +198,7 @@ public class Code {
       }
       private void load(String reg) throws InterruptedException, IOException {//-----------------------------------------------
         System.out.println("memory location to transfer to register: ");
-        dataLoad = in.nextInt();
+          int dataLoad = in.nextInt();
         switch(dataLoad) {
             case 0:
                 if(reg.equalsIgnoreCase("x")) {
@@ -322,6 +316,6 @@ public class Code {
         System.out.println("m6: " + mem6);
         System.out.println("m7: " + mem7);
         Thread.sleep(1000);
-        exec();
+        exec("");
     }
 }
