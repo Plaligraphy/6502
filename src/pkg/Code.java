@@ -9,8 +9,8 @@ public class Code {
     public int sp, x, y, a;
     public String givenCommand;
 
-    private String[] cmds = {"slc", "slx", "sly", "inc","inx", "iny",
-    "dec", "dex", "dey", "ldx", "ldy", "ldc", "zlx", "exit", "lnh", "chk"};
+    //private String[] cmds = {"slc", "slx", "sly", "inc","inx", "iny",
+    //"dec", "dex", "dey", "ldx", "ldy", "ldc", "zlx", "exit", "lnh", "chk"};
 
     public int mem0=0,mem1=0,mem2=0,mem3=0,mem4=0,mem5=0,mem6=0,mem7=0;
 
@@ -85,7 +85,7 @@ public class Code {
             }
         }else if(givenCommand.equalsIgnoreCase("exit")) {
             System.out.println("Exiting...");
-            System.exit(0);
+           // System.exit(0);
         }
 
       }
