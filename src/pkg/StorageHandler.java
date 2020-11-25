@@ -1,14 +1,19 @@
 package pkg;
 
+import java.util.Scanner;
+
 public class StorageHandler implements main {
     private int a,x,y,pc,p; //Accumulator, index regs, P = Status, Program Counter
     private int mem0,mem1,mem2;  //Memory integers, might switch to hex
+    public String cmd;
+    public Scanner in = new Scanner(System.in);
     public void setA(int a) {
         this.a = a;
     }
 
     public void setP(int p) {
         this.p = p;
+        System.out.println("setting p");
     }
 
     public void setPc(int pc) {
@@ -31,6 +36,7 @@ public class StorageHandler implements main {
     }
 
     public int getP() {
+        System.out.println("getting p");
         return p;
     }
     public int getX() {
@@ -58,4 +64,26 @@ public class StorageHandler implements main {
     public int getMem2() {
         return mem2;
     }
+    public void runtime() {
+        //Ran every revolution
+        System.out.println("\n");
+        System.out.println("A: " + getA());
+        System.out.println("X: " + getX());
+        System.out.println("Y: " + getY());
+        System.out.println("CPU Status: " + getP());
+        System.out.println("Program Counter: " + getPc());
+        System.out.println("Mem0 = " + getMem0());
+        System.out.println("Mem1 = " + getMem1());
+        System.out.println("Mem2 = " + getMem2());
+        System.out.println();
+        System.out.println("Cmd: ");
+        setCmd(in.nextLine());
+    }
+    public String getCmd() {
+        return cmd;
+    }
+    public void setCmd(String cmd) {
+        this.cmd = cmd;
+    }
+
 }
