@@ -1,0 +1,31 @@
+Documentation for 6502
+
+printVals()
+Prints all registers and memory for display using System.out
+
+getUserInput()
+Using Scanner, fetches user input and puts in lowercase for future handling
+
+parseUserInput()
+Takes info from getUserInput() and checks against preset conditions for parseable commands
+ST commands are seperate from the main switch statement
+STs are first split from their formatted (Ex: stx,0) into two seperate strings for parsing
+Both strings then get whitespaces removed for completness using removeWhitespace()
+Finally, a setMemory() call is made with var for register selection and locale being set to the 2nd split String
+
+setMemory(int var, int locale)
+Sets memory conditions according to the “memsize” variable
+locale selected which piece of memory (which part of the Array) to place the registers data
+var selects which register the data is going to be pulled from
+
+checkInterrupts()
+Detects interrupt codes in memory using if w/&
+
+getA,getX,getY
+Gets the, respective, A,X,Y variable when called
+
+setA, setX,setY
+Sets the, respective A,X,Y and takes a Integer to set to
+
+removeWhitespace()
+Uses replaceAll with the “\\s” command to remove whitespaces from strings

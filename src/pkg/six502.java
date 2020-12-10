@@ -66,15 +66,11 @@ public class six502 {
             case "stop":
                 running = false;
                 break;
-            case "debug":
-
-
-                break;
         }
         if(runningUserInput.contains("st")) {
             String[] split = runningUserInput.split(",");
-            split[0] = wr(split[0]);
-            split[1] = wr(split[1]);
+            split[0] = removeWhitespace(split[0]);
+            split[1] = removeWhitespace(split[1]);
             switch(split[0]) {
                 case "sta":
                     setMemory(0,Integer.parseInt(split[1]));
@@ -89,9 +85,9 @@ public class six502 {
         }
 
     }
-    private void setMemory(int var, int locale) {           //var for selecting which register (A,X,Y)
-                                   //locale for selecting memory location (changes according to memsize)
-              // 0 = a    1 = x   2 = y
+    private void setMemory(int var, int locale) {
+        //var sets which register is being stored
+        //locale sets which part of memory the value of said register is being stored in
         switch(var) {
             case 0:
                 memory[locale] = getA();
@@ -110,12 +106,10 @@ public class six502 {
     }
     public void checkInterrupts() {
         if(memory[0] == 0 && memory[1] == 4 && memory[2] == 2) {
-            System.out.println("print intr");
+            System.out.println("Exit Code Called! Exiting now...");
             running=false;
         }
     }
-
-
 
     public int getA() {
         return a;
@@ -135,7 +129,7 @@ public class six502 {
     public void setY(int y) {
         this.y = y;
     }
-    public String wr(String pa) {
+    public String removeWhitespace(String pa) {
         String pt;
         pt = pa.replaceAll("\\s+","");
         return pt;
