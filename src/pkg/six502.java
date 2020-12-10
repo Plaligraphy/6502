@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class six502 {
     private boolean running = false;
 
-    private final int memsize = 3;
+    private final int memsize = 5;
 
     private int a = 0;
     private int x = 0;
@@ -17,8 +17,6 @@ public class six502 {
 
     public static void main(String[] args) {
         six502 s = new six502();
-
-
         System.out.println("-- 6502 Emu --");
         s.running = true;
         while(s.running) {
@@ -44,7 +42,8 @@ public class six502 {
         return (in.nextLine()).toLowerCase();
     }
     private void parseUserInput() {
-        switch(getUserInput()) {
+        String runningUserInput = getUserInput();
+        switch(runningUserInput) {
             case "inx":
                 x++;
                 break;
@@ -63,24 +62,36 @@ public class six502 {
             case "dec":
                 a--;
                 break;
-            case "sta":
-                setMemory(0);
-                break;
-            case "stx":
-                setMemory(1);
-                break;
-            case "sty":
-                setMemory(2);
-                break;
+
             case "stop":
                 running = false;
                 break;
+            case "debug":
+
+
+                break;
         }
+        if(runningUserInput.contains("st")) {
+            String[] split = runningUserInput.split(",");
+            split[0] = wr(split[0]);
+            split[1] = wr(split[1]);
+            switch(split[0]) {
+                case "sta":
+                    setMemory(0,Integer.parseInt(split[1]));
+                    break;
+                case "stx":
+                    setMemory(1,Integer.parseInt(split[1]));
+                    break;
+                case "sty":
+                    setMemory(2,Integer.parseInt(split[1]));
+                    break;
+            }
+        }
+
     }
-    private void setMemory(int var) {           //var for selecting which register (A,X,Y)
-        int locale;                             //locale for selecting memory location (changes according to memsize)
-        System.out.println("Memory Locale: ");       // 0 = a    1 = x   2 = y
-        locale = Integer.parseInt(getUserInput());
+    private void setMemory(int var, int locale) {           //var for selecting which register (A,X,Y)
+                                   //locale for selecting memory location (changes according to memsize)
+              // 0 = a    1 = x   2 = y
         switch(var) {
             case 0:
                 memory[locale] = getA();
@@ -106,7 +117,6 @@ public class six502 {
 
 
 
-
     public int getA() {
         return a;
     }
@@ -124,5 +134,10 @@ public class six502 {
     }
     public void setY(int y) {
         this.y = y;
+    }
+    public String wr(String pa) {
+        String pt;
+        pt = pa.replaceAll("\\s+","");
+        return pt;
     }
 }
