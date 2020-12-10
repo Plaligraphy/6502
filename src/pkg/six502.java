@@ -25,6 +25,7 @@ public class six502 {
             s.printVals();
             s.parseUserInput();
             s.pc++;
+            s.checkInterrupts();
         }
         System.out.println("Closing...");
     }
@@ -71,22 +72,6 @@ public class six502 {
             case "sty":
                 setMemory(2);
                 break;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             case "stop":
                 running = false;
                 break;
@@ -94,8 +79,7 @@ public class six502 {
     }
     private void setMemory(int var) {           //var for selecting which register (A,X,Y)
         int locale;                             //locale for selecting memory location (changes according to memsize)
-        System.out.println("Location: ");       // 0 = a    1 = x   2 = y
-        six502 s = new six502();
+        System.out.println("Memory Locale: ");       // 0 = a    1 = x   2 = y
         locale = Integer.parseInt(getUserInput());
         switch(var) {
             case 0:
@@ -113,6 +97,16 @@ public class six502 {
 
         }
     }
+    public void checkInterrupts() {
+        if(memory[0] == 0 && memory[1] == 4 && memory[2] == 2) {
+            System.out.println("print intr");
+            running=false;
+        }
+    }
+
+
+
+
     public int getA() {
         return a;
     }
