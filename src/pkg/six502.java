@@ -1,5 +1,7 @@
 package pkg;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class six502 {
@@ -66,6 +68,14 @@ public class six502 {
             case "stop":
                 running = false;
                 break;
+            case "debug":
+                try {
+                    System.out.println(readFile());
+                } catch (FileNotFoundException e) {
+                    System.out.println("FILE NOT FOUND!");
+                    e.printStackTrace();
+                }
+                break;
         }
         if(runningUserInput.contains("st")) {
             String[] split = runningUserInput.split(",");
@@ -80,6 +90,24 @@ public class six502 {
                     break;
                 case "sty":
                     setMemory(2,Integer.parseInt(split[1]));
+                    break;
+            }
+        }else if(runningUserInput.contains("ld")) {
+            String[] split = runningUserInput.split(",");
+            split[0] = removeWhitespace(split[0]);
+            split[1] = removeWhitespace(split[1]);
+            switch(split[0]) {
+                case "lda":
+                    setA(memory[Integer.parseInt(split[1])]);
+                    memory[Integer.parseInt(split[1])] = 0;
+                    break;
+                case "ldx":
+                    setX(memory[Integer.parseInt(split[1])]);
+                    memory[Integer.parseInt(split[1])] = 0;
+                    break;
+                case "ldy":
+                    setY(memory[Integer.parseInt(split[1])]);
+                    memory[Integer.parseInt(split[1])] = 0;
                     break;
             }
         }
@@ -133,5 +161,11 @@ public class six502 {
         String pt;
         pt = pa.replaceAll("\\s+","");
         return pt;
+    }
+
+
+    public String readFile() throws FileNotFoundException {
+        Scanner in = new Scanner(new File("code.asm"));
+        return in.nextLine();
     }
 }
