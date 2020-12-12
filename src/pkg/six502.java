@@ -1,27 +1,29 @@
 package pkg;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class six502 {
     private boolean running = false;
 
-    private final int memsize = 5;
-
+    private final int memsize = 6;
+    private String codeInput;
     private int a = 0;
     private int x = 0;
     private int y = 0;
     private int pc = 64;
     private int p = 1;
+    int oper;
 
     private int[] memory = new int[memsize];
-
+    public String runningUserInput;
     public static void main(String[] args) {
         six502 s = new six502();
         System.out.println("-- 6502 Emu --");
         s.running = true;
+        s.oper = 0;
         while(s.running) {
+            System.out.println(s.oper);
             s.printVals();
             s.parseUserInput();
             s.pc++;
@@ -44,7 +46,12 @@ public class six502 {
         return (in.nextLine()).toLowerCase();
     }
     private void parseUserInput() {
-        String runningUserInput = getUserInput();
+        if(oper == 0) {
+            runningUserInput = getUserInput();
+        }else if(oper == 1) {
+            runningUserInput = codeInput;
+            System.out.println(oper);
+        }
         switch(runningUserInput) {
             case "inx":
                 x++;
@@ -69,12 +76,13 @@ public class six502 {
                 running = false;
                 break;
             case "debug":
+                FileReader fr = new FileReader();
                 try {
-                    System.out.println(readFile());
+                    fr.readFile();
                 } catch (FileNotFoundException e) {
-                    System.out.println("FILE NOT FOUND!");
                     e.printStackTrace();
                 }
+                //unused
                 break;
         }
         if(runningUserInput.contains("st")) {
@@ -137,6 +145,16 @@ public class six502 {
             System.out.println("Exit Code Called! Exiting now...");
             running=false;
         }
+        if(memory[0] == 1 && memory[1] == 1) {
+            //Addition interrupt when mem0 and mem1 are both equal to 1
+            // Adds mem4 and mem5
+            memory[3] = memory[4] + memory[5];
+            System.out.println(memory[3]);
+            memory[4] = 0;
+            memory[5] = 0;
+            memory[0] = 0;
+            memory[1] = 0; //Could be sped up with for loop but eh
+        }
     }
 
     public int getA() {
@@ -163,9 +181,14 @@ public class six502 {
         return pt;
     }
 
-
-    public String readFile() throws FileNotFoundException {
-        Scanner in = new Scanner(new File("code.asm"));
-        return in.nextLine();
+    public void setRunningUserInput(String cmd) {
+       // System.out.println(cmd);
+        setOper(1);
+        codeInput = cmd;
     }
+    public void setOper(int op) {
+        oper = op;
+        System.out.println(oper);
+    }
+
 }
