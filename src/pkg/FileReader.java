@@ -13,7 +13,7 @@ public class FileReader {
         int i = 0;
         while(in.hasNextLine()) {
           //  System.out.println("["+i+"]" + in.nextLine());
-            s5.setRunningUserInput(in.nextLine());
+            s5.setUserInput(in.nextLine());
             i++;
         }
     }

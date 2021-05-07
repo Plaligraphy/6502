@@ -16,7 +16,7 @@ public class six502 {
     int oper;
 
     private int[] memory = new int[memsize];
-    public String runningUserInput;
+    public String userInput;
     public static void main(String[] args) {
         six502 s = new six502();
         System.out.println("-- 6502 Emu --");
@@ -47,12 +47,12 @@ public class six502 {
     }
     private void parseUserInput() {
         if(oper == 0) {
-            runningUserInput = getUserInput();
+            userInput = getUserInput();
         }else if(oper == 1) {
-            runningUserInput = codeInput;
+            userInput = codeInput;
             System.out.println(oper);
         }
-        switch(runningUserInput) {
+        switch(userInput) {
             case "inx":
                 x++;
                 break;
@@ -85,8 +85,8 @@ public class six502 {
                 //unused
                 break;
         }
-        if(runningUserInput.contains("st")) {
-            String[] split = runningUserInput.split(",");
+        if(userInput.contains("st")) {
+            String[] split = userInput.split(",");
             split[0] = removeWhitespace(split[0]);
             split[1] = removeWhitespace(split[1]);
             switch(split[0]) {
@@ -100,8 +100,8 @@ public class six502 {
                     setMemory(2,Integer.parseInt(split[1]));
                     break;
             }
-        }else if(runningUserInput.contains("ld")) {
-            String[] split = runningUserInput.split(",");
+        }else if(userInput.contains("ld")) {
+            String[] split = userInput.split(",");
             split[0] = removeWhitespace(split[0]);
             split[1] = removeWhitespace(split[1]);
             switch(split[0]) {
@@ -154,7 +154,7 @@ public class six502 {
             memory[5] = 0;
             memory[0] = 0;
             memory[1] = 0; //Could be sped up with for loop but eh
-        }
+        }q
     }
 
     public int getA() {
@@ -181,7 +181,7 @@ public class six502 {
         return pt;
     }
 
-    public void setRunningUserInput(String cmd) {
+    public void setUserInput(String cmd) {
        // System.out.println(cmd);
         setOper(1);
         codeInput = cmd;
