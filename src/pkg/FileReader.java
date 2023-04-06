@@ -3,7 +3,7 @@ package pkg;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
+// Very much work in progress, currently throws FileNotFoundException upon Runtime
 public class FileReader {
     six502 s5 = new six502();
     File file = new File("code.asm");

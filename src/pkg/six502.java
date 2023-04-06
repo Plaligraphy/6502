@@ -2,42 +2,48 @@ package pkg;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
+/*
+TO:DO
+    Fix STA and STOP commands as STA does not currently store and stop currently throws error
+    Rewrite substantial variable usages and consolidate code
+    Prosper
+ */
 public class six502 {
-    private boolean running = false;
+    // Variable Declarations
+    private boolean running = false; // Is the program running?
+    private final int memorySize = 6;  // Sized to 6 for current ease of design. Will be increased in later builds
+    private String codeInput; // Users input parsed into an understandable command.
+    private int a = 0; // Accumulator Register
+    private int x = 0; // X register
+    private int y = 0; // Y Register
+    private int pc = 64; // Program Counter
+    int operation; // Operation Declaration
 
-    private final int memsize = 6;
-    private String codeInput;
-    private int a = 0;
-    private int x = 0;
-    private int y = 0;
-    private int pc = 64;
-    private int p = 1;
-    int oper;
-
-    private int[] memory = new int[memsize];
+    private final int[] memory = new int[memorySize]; // Declares Memory Size
     public String userInput;
     public static void main(String[] args) {
+        // Start of Program
         six502 s = new six502();
         System.out.println("-- 6502 Emu --");
         s.running = true;
-        s.oper = 0;
+        s.operation = 0;
+
         while(s.running) {
-            System.out.println(s.oper);
-            s.printVals();
+            // Main Loop
+            System.out.println(s.operation);
+            s.printValues();
             s.parseUserInput();
             s.pc++;
             s.checkInterrupts();
         }
         System.out.println("Closing...");
     }
-    private void printVals() {
+    private void printValues() {
         System.out.println("A: " + Math.abs(a));
         System.out.println("X: " + Math.abs(x));
         System.out.println("Y: " + Math.abs(y));
-        System.out.println("P: " + Math.abs(p));
         System.out.println("PC: " + Math.abs(pc));
-        for(int i=0;i<memsize;i++) {
+        for(int i = 0; i < memorySize; i++) {
             System.out.println("Memory ["+i+"]: " + memory[i]);
         }
     }
@@ -46,77 +52,59 @@ public class six502 {
         return (in.nextLine()).toLowerCase();
     }
     private void parseUserInput() {
-        if(oper == 0) {
+        if(operation == 0) {
             userInput = getUserInput();
-        }else if(oper == 1) {
+        }else if(operation == 1) {
             userInput = codeInput;
-            System.out.println(oper);
+            System.out.println(operation);
         }
-        switch(userInput) {
-            case "inx":
-                x++;
-                break;
-            case "iny":
-                y++;
-                break;
-            case "inc":
-                a++;
-                break;
-            case "dex":
-                x--;                                                    //Basic CMDs
-                break;
-            case "dey":
-                y--;
-                break;
-            case "dec":
-                a--;
-                break;
-
-            case "stop":
-                running = false;
-                break;
-            case "debug":
+        switch (userInput) {
+            case "inx" -> x++; //Increment X Register
+            case "iny" -> y++; //Increment Y Register
+            case "inc" -> a++; //Increment Accumulator
+            case "dex" -> x--; //Decrement X Register
+            case "dey" -> y--; //Decrement Y Register
+            case "dec" -> a--; //Decrement Accumulator
+            case "stop" -> running = false; // Stops Program
+            /*
+            * Stop does not currently work, throws IndexOutOfBoundsException.
+             */
+            case "debug" -> { // Debugging only see Line 66 Note
                 FileReader fr = new FileReader();
                 try {
                     fr.readFile();
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    e.printStackTrace();    // Eventually will be used for Crash Report storage. Debugging only!
                 }
-                //unused
-                break;
+            }
+
         }
         if(userInput.contains("st")) {
             String[] split = userInput.split(",");
             split[0] = removeWhitespace(split[0]);
             split[1] = removeWhitespace(split[1]);
-            switch(split[0]) {
-                case "sta":
-                    setMemory(0,Integer.parseInt(split[1]));
-                    break;
-                case "stx":
-                    setMemory(1,Integer.parseInt(split[1]));
-                    break;
-                case "sty":
-                    setMemory(2,Integer.parseInt(split[1]));
-                    break;
+            switch (split[0]) {
+                case "sta" -> setMemory(0, Integer.parseInt(split[1]));
+                case "stx" -> setMemory(1, Integer.parseInt(split[1]));
+                case "sty" -> setMemory(2, Integer.parseInt(split[1]));
             }
         }else if(userInput.contains("ld")) {
             String[] split = userInput.split(",");
             split[0] = removeWhitespace(split[0]);
             split[1] = removeWhitespace(split[1]);
-            switch(split[0]) {
-                case "lda":
+            switch (split[0]) {
+                case "lda" -> {
                     setA(memory[Integer.parseInt(split[1])]);
                     memory[Integer.parseInt(split[1])] = 0;
-                    break;
-                case "ldx":
+                }
+                case "ldx" -> {
                     setX(memory[Integer.parseInt(split[1])]);
                     memory[Integer.parseInt(split[1])] = 0;
-                    break;
-                case "ldy":
+                }
+                case "ldy" -> {
                     setY(memory[Integer.parseInt(split[1])]);
                     memory[Integer.parseInt(split[1])] = 0;
-                    break;
+                }
             }
         }
 
@@ -124,20 +112,19 @@ public class six502 {
     private void setMemory(int var, int locale) {
         //var sets which register is being stored
         //locale sets which part of memory the value of said register is being stored in
-        switch(var) {
-            case 0:
+        switch (var) {
+            case 0 -> {
                 memory[locale] = getA();
                 setA(0);
-                break;
-            case 1:
+            }
+            case 1 -> {
                 memory[locale] = getX();
                 setX(0);
-                break;
-            case 2:
+            }
+            case 2 -> {
                 memory[locale] = getY();
                 setY(0);
-                break;
-
+            }
         }
     }
     public void checkInterrupts() {
@@ -154,7 +141,7 @@ public class six502 {
             memory[5] = 0;
             memory[0] = 0;
             memory[1] = 0; //Could be sped up with for loop but eh
-        }q
+        }
     }
 
     public int getA() {
@@ -183,12 +170,12 @@ public class six502 {
 
     public void setUserInput(String cmd) {
        // System.out.println(cmd);
-        setOper(1);
+        setOperation(1);
         codeInput = cmd;
     }
-    public void setOper(int op) {
-        oper = op;
-        System.out.println(oper);
+    public void setOperation(int op) {
+        operation = op;
+        System.out.println(operation);
     }
 
 }
